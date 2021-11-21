@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from selenium import webdriver
+import json
 import requests
 import hashlib
 
@@ -72,18 +72,29 @@ def crawl_active_airdrops(url):
 
 
 if __name__ == '__main__':
-    with open('./driverfolder/driver.txt', 'r') as file:
-        driver_path = file.read()
     list_of_urls, participated_list, winners_list, airdrop_amount_list, deadlines_list, titles_list, airdrop_name_list, unique_list = crawl_active_airdrops(
         "https://coinmarketcap.com/airdrop/")
     url = "http://130.185.120.29:5200/add_info"
     for i in range(len(list_of_urls)):
-        payload = "{\"status\": \"OK\", \n\"error\": \"\", \n\"airdrop_name\": \"" + str(
-            airdrop_name_list[i]) + "\",\n\"title\": \"" + titles_list[i] + "\",\n\"body\": \"" + str(
-            "participated_list : " + str(participated_list) + "\n" + "winners_list : " + str(
-                winners_list) + "\n" + "airdrop_amount_list : " + str(airdrop_amount_list) + "deadlines_list" + str(
-                deadlines_list)) + ",\n\"unique_id\": \"" + unique_list[i] + "\"\n}"
+        # print(airdrop_name_list[i])
+        # print(titles_list[i])
+        # print(participated_list[i])
+        # print(winners_list[i])
+        # print(airdrop_amount_list[i])
+        # print(deadlines_list[i])
+        # print(unique_list[i])
+        # print("*********************************************************************************************")
+        payload_dict = {"status": "OK", "error": "", "airdrop_name": str(
+            airdrop_name_list[i]), "title": titles_list[i], "body": str(
+            "participated_list : " + str(participated_list[i]) + "\n" + "winners_list : " + str(
+                winners_list[i]) + "\n" + "airdrop_amount_list : " + str(
+                airdrop_amount_list[i]) + "deadlines_list" + str(
+                deadlines_list[i])), "unique_id": unique_list[i]}
+
+        with open('payload.json', 'w') as fp:
+            json.dump(payload_dict, fp)
+
         headers = {"content-type": "application/json"}
-        response = requests.request("POST", url, headers=headers, data=payload)
+        response = requests.request("POST", url, headers=headers, data=open('payload.json', 'rb'))
 
         print(response.text)
