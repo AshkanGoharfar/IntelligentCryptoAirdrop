@@ -84,13 +84,13 @@ if __name__ == '__main__':
         # print(deadlines_list[i])
         # print(unique_list[i])
         # print("*********************************************************************************************")
-        payload_dict = {"status": "OK", "error": "", "airdrop_name": str(
-            airdrop_name_list[i]), "title": titles_list[i], "body": str(
-            "participated_list : " + str(participated_list[i]) + "\n" + "winners_list : " + str(
-                winners_list[i]) + "\n" + "airdrop_amount_list : " + str(
-                airdrop_amount_list[i]) + "deadlines_list" + str(
-                deadlines_list[i])), "unique_id": unique_list[i]}
-
+    payload_dict = {"status": "OK", "error": "", "airdrop_name": str(
+        airdrop_name_list[i]), "title": titles_list[i].encode().decode("utf-8"), "body": str(
+        "number of participated : " + str(participated_list[i]) + "\n" + "number of winners : " + str(
+            winners_list[i]) + "\n" + "Total amount of airdrop : " + str(
+            airdrop_amount_list[i]) + "\n" + "deadline : " + str(
+            deadlines_list[i]) + "\n" + "url of main page : " + str(list_of_urls[i])),
+                    "unique_id": unique_list[i]}
         with open('payload.json', 'w') as fp:
             json.dump(payload_dict, fp)
 
